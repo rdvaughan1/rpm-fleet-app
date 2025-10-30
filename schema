@@ -1,0 +1,31 @@
+create table users (
+  id uuid primary key default uuid_generate_v4(),
+  email text unique not null,
+  password_hash text not null,
+  role text default 'user',
+  created_at timestamp default now()
+);
+
+create table vehicles (
+  id uuid primary key default uuid_generate_v4(),
+  vin text unique not null,
+  name text,
+  client_id uuid,
+  driver_name text,
+  last_location text,
+  updated_at timestamp default now()
+);
+
+create table clients (
+  id uuid primary key default uuid_generate_v4(),
+  name text,
+  email text,
+  phone text,
+  logo_url text
+);
+
+create table user_vehicles (
+  user_id uuid references users(id),
+  vehicle_id uuid references vehicles(id),
+  primary key (user_id, vehicle_id)
+);
