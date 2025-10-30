@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RPM Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <nav class="bg-white shadow p-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold">RPM Dashboard</h1>
+    <button onclick="logout()" class="text-sm text-red-600">Logout</button>
+  </nav>
+  <main class="p-6">
+    <h2 class="text-2xl font-semibold mb-4">Your Vehicles</h2>
+    <div id="vehicle-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const supabase = supabase.createClient('https://your-project-url.supabase.co', 'public-anon-key');
+
+    async function fetchVehicles() {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return window.location.href = '/index.html';
+      const { data, error } = await supabase
+        .from('user_vehicles')
+        .select('vehicle_id, vehicles!inner(name, vin, last_location)')
+        .eq('user_id', user.id);
+      if (error) return alert(error.message);
+      const container = document.getElementById('vehicle-list');
+      container.innerHTML = data.map(v => `
+        <div class="bg-white p-4 rounded shadow">
+          <h3 class="text-lg font-bold">${v.vehicles.name}</h3>
+          <p><strong>VIN:</strong> ${v.vehicles.vin}</p>
+          <p><strong>Location:</strong> ${v.vehicles.last_location}</p>
+        </div>
+      `).join('');
+    }
+
+    async function logout() {
+      await supabase.auth.signOut();
+      window.location.href = '/index.html';
+    }
+
+    fetchVehicles();
+  </script>
+</body>
+</html>
