@@ -17,7 +17,7 @@
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
   <script>
-    const supabase = supabase.createClient('https://your-project-url.supabase.co', 'public-anon-key');
+   const supabase = supabase.createClient('https://vvmkvzrxvmmjkzmxianm.supabase.co', eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2bWt2enJ4dm1tamt6bXhpYW5tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjE3ODAxNjQsImV4cCI6MjA3NzM1NjE2NH0.R_Kd6-nZl-AZ41qZPFYP0iML-7SqD8WlCB9LzubVFnI);
 
     async function fetchVehicles() {
       const { data: { user } } = await supabase.auth.getUser();
